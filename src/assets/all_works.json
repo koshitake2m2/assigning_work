@@ -1,0 +1,114 @@
+[
+        {
+          "first_require": "1",
+          "name": "議長",
+          "output_order": "1",
+          "second_require": "0",
+          "work_id": "work01"
+        },
+        {
+          "first_require": "1",
+          "name": "報告",
+          "output_order": "2",
+          "second_require": "0",
+          "work_id": "work02"
+        },
+        {
+          "first_require": "1",
+          "name": "メモ",
+          "output_order": "3",
+          "second_require": "0",
+          "work_id": "work03"
+        },
+        {
+          "first_require": "0",
+          "name": "プリンタ",
+          "output_order": "4",
+          "second_require": "1",
+          "work_id": "work04"
+        },
+        {
+          "first_require": "0",
+          "name": "ゴミ捨て",
+          "output_order": "5",
+          "second_require": "2",
+          "work_id": "work05"
+        },
+        {
+          "first_require": "0",
+          "name": "CS自習室掃除",
+          "output_order": "6",
+          "second_require": "2",
+          "work_id": "work06"
+        },
+        {
+          "first_require": "0",
+          "name": "KKI前廊下掃除",
+          "output_order": "7",
+          "second_require": "2",
+          "work_id": "work07"
+        },
+        {
+          "first_require": "0",
+          "name": "KKI机掃除",
+          "output_order": "8",
+          "second_require": "2",
+          "work_id": "work08"
+        },
+        {
+          "first_require": "0",
+          "name": "アシスト室掃除",
+          "output_order": "9",
+          "second_require": "1",
+          "work_id": "work09"
+        },
+        {
+          "first_require": "0",
+          "name": "加湿器",
+          "output_order": "10",
+          "second_require": "0",
+          "work_id": "work10"
+        },
+        {
+          "first_require": "0",
+          "name": "蛍光灯",
+          "output_order": "11",
+          "second_require": "0",
+          "work_id": "work11"
+        },
+        {
+          "first_require": "0",
+          "name": "注意メール",
+          "output_order": "12",
+          "second_require": "0",
+          "work_id": "work12"
+        },
+        {
+          "first_require": "0",
+          "name": "LG編集",
+          "output_order": "13",
+          "second_require": "0",
+          "work_id": "work13"
+        },
+        {
+          "first_require": "0",
+          "name": "中間ディスプレイ編集",
+          "output_order": "14",
+          "second_require": "0",
+          "work_id": "work14"
+        },
+        {
+          "first_require": "0",
+          "name": "空き端末表編集",
+          "output_order": "15",
+          "second_require": "0",
+          "work_id": "work15"
+        },
+        {
+          "first_require": "0",
+          "name": "張り紙",
+          "output_order": "16",
+          "second_require": "0",
+          "work_id": "work16"
+        }
+      ]
