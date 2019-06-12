@@ -16,14 +16,17 @@
 {{ members_by_assigned_work }}</textarea
       >
     </form>
+    <button v-on:click="writeMeetingInfo">Submit</button>
   </div>
 </template>
 
 <script>
+import db from "@/firebaseInit";
 export default {
   props: {
     member_info_list: Array,
-    all_works: Array
+    all_works: Array,
+    meeting_info: Object
   },
   data: function() {
     return {};
@@ -88,6 +91,9 @@ export default {
       }
       // フォーカスを外す
       target.blur();
+    },
+    writeMeetingInfo: function() {
+      this.$emit("update-db");
     }
   }
 };

@@ -59,6 +59,7 @@
     <assigned-work-text
       v-bind:member_info_list="member_info_list"
       v-bind:all_works="all_works"
+      v-on:update-db="writeMeetingInfo"
     >
     </assigned-work-text>
   </div>
@@ -346,6 +347,14 @@ export default {
     },
     showAllMemberInfo: function() {
       console.log(JSON.stringify(this.member_info_list, null, "    "));
+    },
+    writeMeetingInfo: function() {
+      if (this.meeting_info.is_submited) {
+        alert("一度提出しました。");
+        return;
+      }
+      this.meeting_info.is_submited = true;
+      alert("提出できました");
     }
   }
 };

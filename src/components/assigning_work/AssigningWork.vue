@@ -59,6 +59,8 @@
     <assigned-work-text
       v-bind:member_info_list="member_info_list"
       v-bind:all_works="all_works"
+      v-bind:meeting_info="meeting_info"
+      v-on:update-db="writeMeetingInfo"
     >
     </assigned-work-text>
   </div>
@@ -102,12 +104,14 @@ export default {
         place: "",
         start_time: "",
         end_time: "",
-        date: ""
+        date: "",
+        is_submited: false
       },
-      all_members: all_members_json,
-      all_works: all_works_json,
+      all_members: [], //all_members_json,
+      all_works: [],
+      // all_works_json,
       //member_info_list: [] // 過去の当番回数情報
-      member_info_list: member_info_list_json, // 過去の当番回数情報
+      member_info_list: [], // member_info_list_json, // 過去の当番回数情報
       option_members: [] // member_info_list_json.slice()
     };
   },
@@ -169,163 +173,187 @@ export default {
     const today_date = new Date();
     console.log(today_date);
     this.meeting_info.date =
-      today_date.toLocaleDateString() + "_" + today_date.toLocaleTimeString();
+      today_date
+        .toLocaleDateString()
+        .split("/")
+        .join(":") +
+      "_" +
+      today_date.toLocaleTimeString();
     console.log(this.meeting_info.date);
     this.meeting_info.start_time = today_date
       .toLocaleTimeString()
       .split(":")
       .splice(0, 2)
       .join(":");
-    this.all_members = arrayShuffle(this.all_members);
-    this.all_members = arrayShuffle(this.all_members);
-    this.all_members = arrayShuffle(this.all_members);
-    this.all_members
-      .sort(compareValues("stu_num"))
-      .sort(compareValues("grade")); // 学籍番号でソートしたのち、学年でソート
-    this.all_members.sort(compareValues("stu_num"));
-    this.member_info_list.sort(compareValues("stu_num"));
-    this.option_members = Array.from(this.member_info_list).map(obj => {
-      return Object.create(obj);
-    });
     // ユーザ情報
     let all_members = [];
     // todo: 以下を消してdbのところに移す
     let all_stu_nums = [];
-    this.all_members.forEach(member => {
-      all_stu_nums.push(member.stu_num);
-    });
 
-    //    db.collection("members")
-    //      .get()
-    //      .then(snapshot => {
-    //        snapshot.forEach(doc => {
-    //          //all_members[doc.id] = doc.data();
-    //          all_members.push(doc.data());
-    //          console.log(doc.id, "=>", doc.data());
-    //        });
-    //      })
-    //      .catch(err => {
-    //        console.log("Error getting documents", err);
-    //      });
-    //    this.all_members = all_members;
-    //    console.log("created!!");
+    // メンバー
     // 仕事
-    let all_works = [];
-    // todo: 以下を消してdbのところに移す
     let work_ids = [];
-    this.all_works.forEach(work => {
-      work_ids.push(work.work_id);
-      work["first_choiced_members"] = [];
-      work["second_choiced_members"] = [];
-    });
-    delete this.all_works["__ob__"];
-    //db.collection("works")
-    //  .get()
-    //  .then(snapshot => {
-    //    snapshot.forEach(doc => {
-    //      //all_works[doc.id] = doc.data();
-    //      work_ids.push(doc.id);
-    //      all_works.push(doc.data());
-    //      console.log(doc.id, "=>", doc.data());
-    //    });
-    //  })
-    //  .catch(err => {
-    //    console.log("Error getting documents", err);
-    //  });
-    //this.all_works = all_works;
     let member_info_list = [];
     let member_info_dic = {};
+    let flag = false;
+    db.collection("members")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //all_members[doc.id] = doc.data();
+          all_members.push(doc.data());
+          // console.log(doc.id, "=>", doc.data());
+        });
+      })
+      .then(msg => {
+        this.all_members = all_members;
+        this.all_members.forEach(member => {
+          all_stu_nums.push(member.stu_num);
+        });
+        console.log("created!!");
 
-    // メンバーの過去の情報と今回の情報を初期化
-    for (const member of this.all_members) {
-      member_info_dic[member.stu_num] = {
-        name: member.name,
-        grade: member.grade,
-        priority: member.priority,
-        stu_num: member.stu_num,
-        attendance: "x",
-        work: "",
-        work_id: "",
-        work_count: 0,
-        attendance_by_category: {
-          o: 0,
-          l: 0,
-          e: 0,
-          x: 0,
-          "-": 0
-        },
-        work_count_by_category: {
-          work98: 0 // その他
-        }
-      };
-      for (const work of this.all_works) {
-        member_info_dic[member.stu_num]["work_count_by_category"][
-          work.work_id
-        ] = 0;
-      }
-    }
+        let all_works = [];
+        // 仕事
+        db.collection("works")
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              //all_works[doc.id] = doc.data();
+              work_ids.push(doc.id);
+              all_works.push(doc.data());
+              // console.log(doc.id, "=>", doc.data());
+            });
+          })
+          .then(msg => {
+            this.all_works = all_works;
+          })
+          .catch(err => {
+            console.log("Error getting documents", err);
+          })
+          .then(msg => {
+            // メンバーの過去の情報と今回の情報を初期化
+            console.log("member_info_dic");
+            for (const member of this.all_members) {
+              member_info_dic[member.stu_num] = {
+                name: member.name,
+                grade: member.grade,
+                priority: member.priority,
+                stu_num: member.stu_num,
+                attendance: "o",
+                assigned_work: "",
+                assigned_work_id: "",
+                work_count: 0,
+                attendance_by_category: {
+                  o: 0,
+                  l: 0,
+                  e: 0,
+                  x: 0,
+                  "-": 0
+                },
+                work_count_by_category: {
+                  work98: 0 // その他
+                }
+              };
+              console.log(this.all_works);
+              for (const work of this.all_works) {
+                member_info_dic[member.stu_num]["work_count_by_category"][
+                  work.work_id
+                ] = 0;
+              }
+            }
+            console.log(this.all_works);
+          })
+          .then(msg => {
+            db.collection("past_meeting")
+              .get()
+              .then(snapshot => {
+                snapshot.forEach(doc => {
+                  for (const stu_num of Object.keys(
+                    doc.data()["attendance_by_member"]
+                  )) {
+                    const member_info = doc.data()["attendance_by_member"][
+                      stu_num
+                    ];
+                    // const stu_num = member_info.stu_num;
+                    if (all_stu_nums.indexOf(stu_num) === -1) {
+                      console.log(stu_num + " この人は今いません");
+                      continue;
+                    }
+                    // todo: 出席、work_idを追加 work_id == ''
+
+                    // 過去の出席状況
+                    member_info_dic[stu_num]["attendance_by_category"][
+                      member_info.attendance
+                    ] += 1;
+
+                    // 過去の当番経験
+                    const work_id = member_info.work_id;
+                    if (work_id === "") {
+                      // 仕事なし
+                      // pass
+                    } else if (work_ids.indexOf(work_id !== -1)) {
+                      member_info_dic[stu_num]["work_count"]++;
+                      member_info_dic[stu_num]["work_count_by_category"][
+                        work_id
+                      ]++;
+                    } else {
+                      member_info_dic[stu_num]["work_count"]++;
+                      member_info_dic[stu_num]["work_count_by_category"][
+                        "work98"
+                      ]++; // その他
+                    }
+                  }
+                });
+              })
+              .then(msg => {
+                this.member_info_list = member_info_list;
+                this.member_info_list = arrayShuffle(this.member_info_list);
+                this.member_info_list = arrayShuffle(this.member_info_list);
+                this.member_info_list = arrayShuffle(this.member_info_list);
+                this.member_info_list.sort(compareValues("grade"));
+                this.member_info_list.sort(compareValues("stu_num", "desc"));
+                this.member_info_list.sort(compareValues("work_count", "desc"));
+                this.member_info_list.sort(
+                  compareDeepValues("work_count_by_category", "work07", "desc")
+                );
+              })
+              .catch(err => {
+                console.log("Error getting documents", err);
+              })
+              .then(msg => {
+                for (const key of Object.keys(member_info_dic)) {
+                  member_info_list.push(member_info_dic[key]);
+                }
+                this.member_info_list = member_info_list;
+                //this.member_info_list.sort(
+                //  compareDeepValues("work_count_by_category", "work03")
+                //);
+
+                this.all_members = arrayShuffle(this.all_members);
+                this.all_members = arrayShuffle(this.all_members);
+                this.all_members = arrayShuffle(this.all_members);
+                this.all_members
+                  .sort(compareValues("stu_num"))
+                  .sort(compareValues("grade")); // 学籍番号でソートしたのち、学年でソート
+                this.all_members.sort(compareValues("stu_num"));
+                this.member_info_list.sort(compareValues("stu_num"));
+                this.option_members = Array.from(this.member_info_list).map(
+                  obj => {
+                    return Object.create(obj);
+                  }
+                );
+                console.log(this.all_works);
+              })
+              .catch(err => {
+                console.log("Error getting documents", err);
+              });
+            console.log("created_works");
+          });
+      });
 
     //axios
     //  .get("/assets/member_info_list.json")
     //  .then(response => (this.member_info_list = response));
-    /*
-    db.collection("past_meeting")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          for (const stu_num of Object.keys(
-            doc.data()["attendance_by_member"]
-          )) {
-            const member_info = doc.data()["attendance_by_member"][stu_num];
-            // const stu_num = member_info.stu_num;
-            if (all_stu_nums.indexOf(stu_num) === -1) {
-              console.log(stu_num + " この人は今いません");
-              continue;
-            }
-            // todo: 出席、work_idを追加 work_id == ''
-
-            // 過去の出席状況
-            member_info_dic[stu_num]["attendance_by_category"][
-              member_info.attendance
-            ] += 1;
-
-            // 過去の当番経験
-            const work_id = member_info.work_id;
-            if (work_id === "") {
-              // 仕事なし
-              // pass
-            } else if (work_ids.indexOf(work_id !== -1)) {
-              member_info_dic[stu_num]["work_count"]++;
-              member_info_dic[stu_num]["work_count_by_category"][work_id]++;
-            } else {
-              member_info_dic[stu_num]["work_count"]++;
-              member_info_dic[stu_num]["work_count_by_category"]["work98"]++; // その他
-            }
-          }
-        });
-      })
-      .then(msg => {
-        this.member_info_list = member_info_list;
-        this.member_info_list = arrayShuffle(this.member_info_list);
-        this.member_info_list = arrayShuffle(this.member_info_list);
-        this.member_info_list = arrayShuffle(this.member_info_list);
-        this.member_info_list.sort(compareValues("grade"));
-        this.member_info_list.sort(compareValues("stu_num", "desc"));
-        this.member_info_list.sort(compareValues("work_count", "desc"));
-        this.member_info_list.sort(
-          compareDeepValues("work_count_by_category", "work07", "desc")
-        );
-      })
-      .catch(err => {
-        console.log("Error getting documents", err);
-      });
-    for (const key of Object.keys(member_info_dic)) {
-      member_info_list.push(member_info_dic[key]);
-    }
-    //this.member_info_list.sort(
-    //  compareDeepValues("work_count_by_category", "work03")
-    //);
-    */
   },
   methods: {
     showAllMembers: function() {
@@ -346,6 +374,32 @@ export default {
     },
     showAllMemberInfo: function() {
       console.log(JSON.stringify(this.member_info_list, null, "    "));
+    },
+    writeMeetingInfo: function() {
+      if (this.meeting_info.is_submited) {
+        alert("一度提出しました。");
+        return;
+      }
+      let this_meeting = Object.assign({}, this.meeting_info);
+      delete this_meeting.is_submited;
+      this_meeting["attendance_by_member"] = {};
+      for (const member_info of this.member_info_list) {
+        this_meeting["attendance_by_member"][member_info.stu_num] = {
+          attendance: member_info.attendance,
+          stu_num: member_info.stu_num,
+          username: member_info.name,
+          work: member_info.assigned_work,
+          work_id: member_info.assigned_work_id
+        };
+      }
+      db.collection("past_meeting")
+        .doc(this.meeting_info.date)
+        .set(this_meeting)
+        .then(res => {})
+        .catch(err => {});
+      this.meeting_info.is_submited = true;
+
+      alert("提出できました");
     }
   }
 };

@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Home from '@/components/Home'
 import PracticeApp from '@/components/practice/PracticeApp'
 import AssigningWork from '@/components/assigning_work/AssigningWork'
+import AssigningWorkDev from '@/components/assigning_work/AssigningWorkDev'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/assigning_work',
       name: 'assigning_work',
       component: AssigningWork
+    },
+    {
+      path: '/assigning_work_dev',
+      name: 'assigning_work_dev',
+      component: AssigningWorkDev
     },
     {
       path: '/practice',
