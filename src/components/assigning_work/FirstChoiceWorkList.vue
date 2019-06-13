@@ -1,29 +1,61 @@
 <template lang="html">
   <div>
-    決まった : まだ = {{ n_selected_members }} : {{ n_not_selected_members }}
-    <form v-on:submit.prevent="addFirstChoiceWork(selected_work_id)">
-      <select v-model="selected_work_id">
-        <option value="" disabled>Please select one</option>
-        <option
-          v-for="work in not_first_choice_works"
-          v-bind:key="work.work_id"
-          v-bind:value="work.work_id"
-        >
-          {{ work.name }}
-        </option>
-      </select>
-      <button>Add</button>
-    </form>
-    <ul>
-      <li
-        is="first-choice-work-list-item"
-        v-for="(work, index) in first_choice_works"
-        v-bind:key="work.work_id"
-        v-bind:work="work"
-        v-bind:selectable_members="selectable_members"
-        v-bind:member_info_list="member_info_list"
-      ></li>
-    </ul>
+    <div class="columns">
+      <!--
+      手動決めできる仕事を追加
+      -->
+      <div class="column">
+        <h2 class="subtitle">3.1. 手動決めできる仕事を追加</h2>
+        <form v-on:submit.prevent="addFirstChoiceWork(selected_work_id)">
+          <div class="select">
+            <select v-model="selected_work_id">
+              <option value="" disabled>どの仕事を？</option>
+              <option
+                v-for="work in not_first_choice_works"
+                v-bind:key="work.work_id"
+                v-bind:value="work.work_id"
+              >
+                {{ work.name }}
+              </option>
+            </select>
+          </div>
+          <button class="button is-info">Add</button>
+        </form>
+        <br />
+        <div class="content">
+          <h3 class="subtitle">先に決める仕事</h3>
+          <ul>
+            <li
+              v-for="(work, index) in first_choice_works"
+              v-bind:key="work.work_id"
+            >
+              {{ work.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!--
+      手動決め
+      -->
+      <div class="column">
+        <h2 class="subtitle">3.2. 各仕事ごと当番を決める</h2>
+        決まった人数 : 残りの人数 = {{ n_selected_members }} :
+        {{ n_not_selected_members }}
+        <p>{{ meeting_info.can_run }}</p>
+        <ul>
+          <li
+            is="first-choice-work-list-item"
+            v-for="(work, index) in first_choice_works"
+            v-bind:key="work.work_id"
+            v-bind:work="work"
+            v-bind:selectable_members="selectable_members"
+            v-bind:member_info_list="member_info_list"
+            v-bind:meeting_info="meeting_info"
+          ></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,7 +68,8 @@ export default {
   props: {
     all_works: Array,
     selectable_members: Array,
-    member_info_list: Array
+    member_info_list: Array,
+    meeting_info: Object
   },
   data: function() {
     return {

@@ -1,68 +1,150 @@
 <template lang="html">
-  <div>
-    <p>AssigningWork</p>
-    <meeting-info v-bind:meeting_info="meeting_info"> </meeting-info>
-    <table>
-      <tr>
-        <th>出席確認</th>
-        <th>先決め first_choice</th>
-        <th>ランダム決め second_choice</th>
-      </tr>
-      <tr>
-        <!--
-        出席確認
-        -->
-        <td valign="top">
-          <check-attendance-list
-            v-bind:all_members="all_members"
-            v-bind:member_info_list="member_info_list"
-          >
-          </check-attendance-list>
-        </td>
-        <!--
-        仕事 first_choice
-        -->
-        <td valign="top">
-          <first-choice-work-list
-            v-bind:all_works="all_works"
-            v-bind:member_info_list="member_info_list"
-            v-bind:selectable_members="selectable_members"
-          >
-          </first-choice-work-list>
-        </td>
-        <!--
-        仕事 second_choice
-        -->
-        <td valign="top">
-          <second-choice-work-list
-            v-bind:all_works="all_works"
-            v-bind:member_info_list="member_info_list"
-            v-bind:meeting_info="meeting_info"
-          >
-          </second-choice-work-list>
-        </td>
-      </tr>
-    </table>
+  <div class="container">
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">AssigningWork</h1>
+          <h2 class="subtitle">出席確認＋当番割り当て</h2>
+        </div>
+      </div>
+    </section>
 
-    <button v-on:click="showAllMembers" />
-    <button v-on:click="showAllMemberInfo" />
     <!--
-    <attending-member-list
-      v-bind:member-list="attending_members"
-    ></attending-member-list>
-    <assigned-work-list
-      v-bind:member_info_list="member_info_list"
-      v-bind:all_works="all_works"
-    >
-    </assigned-work-list>
+        目次
     -->
-    <assigned-work-text
-      v-bind:member_info_list="member_info_list"
-      v-bind:all_works="all_works"
-      v-bind:meeting_info="meeting_info"
-      v-on:update-db="writeMeetingInfo"
-    >
-    </assigned-work-text>
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">0. 目次</h1>
+        <div class="content">
+          <div class="columns is-mobile is-centered">
+            <div class="column is-2">
+              <ol type="1" start="0" align="left">
+                <li>目次</li>
+                <li>会議の情報</li>
+                <li>出席確認</li>
+                <li>手動決め</li>
+                <li>ランダム決め</li>
+                <li>出席と当番の確認</li>
+                <li>今日の会議情報の保存</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        会議の情報
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">1. 会議の情報</h1>
+        <meeting-info v-bind:meeting_info="meeting_info"> </meeting-info>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        出席確認
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">2. 出席確認</h1>
+        <check-attendance-columns v-bind:member_info_list="member_info_list">
+        </check-attendance-columns>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        仕事 first_choice
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">3. 手動決め</h1>
+        <first-choice-work-list
+          v-bind:all_works="all_works"
+          v-bind:member_info_list="member_info_list"
+          v-bind:selectable_members="selectable_members"
+          v-bind:meeting_info="meeting_info"
+        >
+        </first-choice-work-list>
+        <hr />
+      </div>
+    </section>
+    <!--
+        仕事 second_choice
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">4. ランダム決め</h1>
+        <second-choice-work-list
+          v-bind:all_works="all_works"
+          v-bind:member_info_list="member_info_list"
+          v-bind:meeting_info="meeting_info"
+        >
+        </second-choice-work-list>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        出席と当番の情報
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">5. 出席と当番の情報</h1>
+        <assigned-work-text
+          v-bind:member_info_list="member_info_list"
+          v-bind:all_works="all_works"
+          v-bind:meeting_info="meeting_info"
+          v-on:update-db="writeMeetingInfo"
+        >
+        </assigned-work-text>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        今日の会議情報を保存
+    -->
+    <section class="section">
+      <div class="container" align="center">
+        <h1 class="title">6. 今日の会議情報を保存</h1>
+        <br />
+        <h2 class="subtitle">今日の会議の情報をfirestoreに保存します</h2>
+        <br />
+        <div class="columns is-mobile">
+          <div class="column is-half is-offset-one-quarter">
+            <button
+              class="button is-primary is-large is-fullwidth"
+              v-bind:disabled="meeting_info.is_submited"
+              v-on:click="writeMeetingInfo"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+        <br />
+        <h2 class="subtitle">今日もお疲れ様でした！</h2>
+        <hr />
+      </div>
+    </section>
+
+    <!--
+        フッター
+    -->
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>AssigningWork</strong> by
+          <a href="https://github.com/koshitake2m2">輿水猛</a>. The source code
+          is licensed
+          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+        </p>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -73,11 +155,9 @@ import all_members_json from "@/assets/all_members.json";
 import all_works_json from "@/assets/all_works.json";
 
 import MeetingInfo from "@/components/assigning_work/MeetingInfo";
-import CheckAttendanceList from "@/components/assigning_work/CheckAttendanceList";
-import AttendingMemberList from "@/components/assigning_work/AttendingMemberList";
+import CheckAttendanceColumns from "@/components/assigning_work/CheckAttendanceColumns";
 import FirstChoiceWorkList from "@/components/assigning_work/FirstChoiceWorkList";
 import SecondChoiceWorkList from "@/components/assigning_work/SecondChoiceWorkList";
-import AssignedWorkList from "@/components/assigning_work/AssignedWorkList";
 import AssignedWorkText from "@/components/assigning_work/AssignedWorkText";
 
 import {
@@ -90,29 +170,27 @@ import db from "@/firebaseInit";
 export default {
   components: {
     MeetingInfo,
-    CheckAttendanceList,
-    AttendingMemberList,
+    CheckAttendanceColumns,
     FirstChoiceWorkList,
     SecondChoiceWorkList,
-    AssignedWorkList,
     AssignedWorkText
   },
   data: function() {
     return {
       meeting_info: {
-        meeting_num: 0,
+        meeting_num: "",
         place: "",
         start_time: "",
         end_time: "",
         date: "",
-        is_submited: false
+        is_submited: false,
+        can_run: true
       },
       all_members: [], //all_members_json,
       all_works: [],
       // all_works_json,
       //member_info_list: [] // 過去の当番回数情報
-      member_info_list: [], // member_info_list_json, // 過去の当番回数情報
-      option_members: [] // member_info_list_json.slice()
+      member_info_list: [] // member_info_list_json, // 過去の当番回数情報
     };
   },
   watch: {},
@@ -210,7 +288,6 @@ export default {
         this.all_members.forEach(member => {
           all_stu_nums.push(member.stu_num);
         });
-        console.log("created!!");
 
         let all_works = [];
         // 仕事
@@ -232,7 +309,6 @@ export default {
           })
           .then(msg => {
             // メンバーの過去の情報と今回の情報を初期化
-            console.log("member_info_dic");
             for (const member of this.all_members) {
               member_info_dic[member.stu_num] = {
                 name: member.name,
@@ -254,14 +330,12 @@ export default {
                   work98: 0 // その他
                 }
               };
-              console.log(this.all_works);
               for (const work of this.all_works) {
                 member_info_dic[member.stu_num]["work_count_by_category"][
                   work.work_id
                 ] = 0;
               }
             }
-            console.log(this.all_works);
           })
           .then(msg => {
             db.collection("past_meeting")
@@ -337,12 +411,6 @@ export default {
                   .sort(compareValues("grade")); // 学籍番号でソートしたのち、学年でソート
                 this.all_members.sort(compareValues("stu_num"));
                 this.member_info_list.sort(compareValues("stu_num"));
-                this.option_members = Array.from(this.member_info_list).map(
-                  obj => {
-                    return Object.create(obj);
-                  }
-                );
-                console.log(this.all_works);
               })
               .catch(err => {
                 console.log("Error getting documents", err);
@@ -350,31 +418,8 @@ export default {
             console.log("created_works");
           });
       });
-
-    //axios
-    //  .get("/assets/member_info_list.json")
-    //  .then(response => (this.member_info_list = response));
   },
   methods: {
-    showAllMembers: function() {
-      console.log(this.all_members);
-      //      this.all_members.forEach(member => {
-      //        console.log(member);
-      //      });
-      //      db.collection("members")
-      //      .get()
-      //      .then(snapshot => {
-      //        snapshot.forEach(doc => {
-      //          console.log(doc.id, "=>", doc.data());
-      //        });
-      //      })
-      //      .catch(err => {
-      //        console.log("Error getting documents", err);
-      //      });
-    },
-    showAllMemberInfo: function() {
-      console.log(JSON.stringify(this.member_info_list, null, "    "));
-    },
     writeMeetingInfo: function() {
       if (this.meeting_info.is_submited) {
         alert("一度提出しました。");
@@ -382,6 +427,7 @@ export default {
       }
       let this_meeting = Object.assign({}, this.meeting_info);
       delete this_meeting.is_submited;
+      delete this_meeting.can_run;
       this_meeting["attendance_by_member"] = {};
       for (const member_info of this.member_info_list) {
         this_meeting["attendance_by_member"][member_info.stu_num] = {

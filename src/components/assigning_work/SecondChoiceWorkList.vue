@@ -1,17 +1,61 @@
 <template lang="html">
   <div>
-    決まった : まだ = {{ n_selected_members }} : {{ n_not_selected_members }}
-    <button v-on:click="decideSecondChoice">Done</button> <br />
-    必要な人数 : {{ sum_second_require }}
-    <ul>
-      <li
-        is="second-choice-work-list-item"
-        v-for="(work, index) in all_works"
-        v-bind:key="work.work_id"
-        v-bind:work="work"
-        v-bind:member_info_list="member_info_list"
-      ></li>
-    </ul>
+    <div class="columns is-mobile">
+      <div class="column is-half is-offset-one-quarter">
+        <button
+          class="button is-primary is-large is-fullwidth"
+          v-bind:disabled="cannot_run"
+          v-on:click="decideSecondChoice"
+        >
+          Run
+        </button>
+        <br />
+      </div>
+    </div>
+    決まった人数 : 残りの人数 = {{ n_selected_members }} :
+    {{ n_not_selected_members }} <br />
+    ランダム決めに必要な人数 : {{ sum_second_require }} <br />
+    {{ second_choice_info }}<br />
+    <br />
+    <div class="card"></div>
+
+    <table class="table is-hoverable">
+      <tbody>
+        <tr>
+          <th>仕事</th>
+          <th>必要人数</th>
+          <th></th>
+        </tr>
+        <tr
+          is="second-choice-work-list-item"
+          v-for="(work, index) in all_works"
+          v-bind:key="work.work_id"
+          v-bind:work="work"
+          v-bind:member_info_list="member_info_list"
+        ></tr>
+      </tbody>
+    </table>
+    <br />
+    {{ second_choice_info }}<br />
+    <div class="columns is-mobile">
+      <div class="column is-half is-offset-one-quarter">
+        <button
+          class="button is-primary is-large is-fullwidth"
+          v-bind:disabled="cannot_run"
+          v-on:click="decideSecondChoice"
+        >
+          Run
+        </button>
+        <br />
+        <button
+          class="button is-danger is-large is-fullwidth"
+          v-on:click="clearAssignedWork"
+        >
+          Clear Work
+        </button>
+        <br />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +74,6 @@ export default {
   },
   props: {
     all_works: Array,
-    //selectable_members: Array,
     member_info_list: Array,
     meeting_info: Object
   },
@@ -74,6 +117,23 @@ export default {
       return this.all_works.reduce((acc, work) => {
         return acc + Number(work.second_require);
       }, 0);
+    },
+    second_choice_info: function() {
+      const n_member_has_no_work =
+        this.n_not_selected_members - this.sum_second_require;
+      if (n_member_has_no_work > 0) {
+        return String(n_member_has_no_work) + "人仕事がありませんよ！";
+      } else if (n_member_has_no_work === 0) {
+        return "ちょうどの人数です！";
+      } else {
+        return String(-1 * n_member_has_no_work) + "人足りません！";
+      }
+    },
+    cannot_run: function() {
+      return (
+        this.n_not_selected_members < this.sum_second_require ||
+        !this.meeting_info.can_run
+      );
     }
   },
   methods: {
@@ -121,6 +181,12 @@ export default {
         .split(":")
         .splice(0, 2)
         .join(":");
+    },
+    clearAssignedWork: function() {
+      for (const member_info of this.member_info_list) {
+        member_info.assigned_work = "";
+        member_info.assigned_work_id = "";
+      }
     }
   }
 };

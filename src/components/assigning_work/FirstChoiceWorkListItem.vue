@@ -1,25 +1,30 @@
 <template lang="html">
-  <div>
-    {{ work.name }} : {{ n_selected_member_ids }}人
-    <!--
-    <input type="number" min="0" v-bind:value="first_require" />:
-  -->
-    <form v-on:submit.prevent="addMemberInfo(selected_member_id_info)">
-      <select v-model="selected_member_id">
-        <option value="" disabled>Please select one</option>
-        <selectable-member-option
-          v-for="(member_info, index) in recommended_members_by_work"
-          v-bind:key="member_info.stu_num"
-          v-bind:value="member_info.stu_num"
-          v-bind:member_info="member_info"
-          v-bind:work="work"
-        >
-        </selectable-member-option>
-      </select>
-      <button>Add</button> <button v-on:click="clearWork">Clear</button>
-    </form>
-    担当： {{ selected_member_names }} <br />
-    <br />
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">{{ work.name }}</p>
+    </header>
+    <div class="card-content">
+      <form v-on:submit.prevent="addMemberInfo(selected_member_id_info)">
+        <div class="select">
+          <select v-model="selected_member_id" v-on:change="checkNotAddYet">
+            <option value="" disabled>だれを？</option>
+            <option value="" disabled>名前: (回数/合計数)</option>
+            <option
+              is="selectable-member-option"
+              v-for="(member_info, index) in recommended_members_by_work"
+              v-bind:key="member_info.stu_num"
+              v-bind:value="member_info.stu_num"
+              v-bind:member_info="member_info"
+              v-bind:work="work"
+            >
+            </option>
+          </select>
+        </div>
+        <button class="button is-info">Add</button>
+        <button class="button is-danger" v-on:click="clearWork">Clear</button>
+      </form>
+      <b>当番： {{ selected_member_names }}</b>
+    </div>
   </div>
 </template>
 
@@ -39,7 +44,8 @@ export default {
   props: {
     work: Object,
     selectable_members: Array,
-    member_info_list: Array
+    member_info_list: Array,
+    meeting_info: Object
   },
   data: function() {
     return {
@@ -114,6 +120,7 @@ export default {
           assignable_members[index]["assigned_work_id"] = this.work.work_id;
         }
         this.selected_member_id = "";
+        this.meeting_info.can_run = true;
       }
     },
     clearWork: function() {
@@ -131,16 +138,12 @@ export default {
         this.member_info_list[index]["assigned_work_id"] = "";
       }
       this.selected_member_id = "";
-      /*
-      const index = this.member_info_list.findIndex(
-        ({ assigned_work_id }) => assigned_work_id === this.work.work_id
-      );
-      if (index >= 0) {
-        this.member_info_list[index]["assigned_work"] = "";
-        this.member_info_list[index]["assigned_work_id"] = "";
-        this.selected_member_id = "";
+      this.meeting_info.can_run = true;
+    },
+    checkNotAddYet: function() {
+      if (this.selected_member_id !== "") {
+        this.meeting_info.can_run = false;
       }
-      */
     }
   }
 };

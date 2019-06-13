@@ -1,12 +1,23 @@
 <template lang="html">
   <div>
+    <div class="content">
+      <div class="columns is-mobile">
+        <div class="column is-half is-offset-one-quarter">
+          <ol type="1" align="left">
+            <li>コピーしてSlackに貼り付けてね！</li>
+            <li>報告係はテンプレに貼り付けてね！</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <form v-on:submit.prevent="copyAssignedWorkText">
-      <button v-on:click="copyAssignedWorkText">Copy</button>
+      <br />
       <textarea
         ref="textarea"
+        class="textarea"
         id="assigning_work_text"
         cols="80"
-        rows="30"
+        rows="15"
         readonly
       >
 出席者：
@@ -16,7 +27,22 @@
 {{ members_by_assigned_work }}</textarea
       >
     </form>
-    <button v-on:click="writeMeetingInfo">Submit</button>
+    <br />
+    <div class="columns is-mobile">
+      <div class="column is-half is-offset-one-quarter">
+        <button
+          class="button is-info is-large is-fullwidth"
+          v-on:click="copyAssignedWorkText"
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+    <!--
+    <button class="button is-primary" v-on:click="writeMeetingInfo">
+      Submit
+    </button>
+    -->
   </div>
 </template>
 
@@ -91,10 +117,10 @@ export default {
       }
       // フォーカスを外す
       target.blur();
-    },
-    writeMeetingInfo: function() {
-      this.$emit("update-db");
     }
+    //    writeMeetingInfo: function() {
+    //      this.$emit("update-db");
+    //    }
   }
 };
 </script>

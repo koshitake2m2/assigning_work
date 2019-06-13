@@ -1,41 +1,43 @@
 <template lang="html">
-  <div>
-    <table>
-      <tr>
-        <td>{{ member_info.name }}</td>
-        <td>
-          <form id="attendance_check">
-            <input
-              v-model="member_info.attendance"
-              type="radio"
-              name="attendance_check"
-              value="o"
-              checked
-            />
-            <input
-              v-model="member_info.attendance"
-              type="radio"
-              name="attendance_check"
-              value="e"
-            />
-            <input
-              v-model="member_info.attendance"
-              type="radio"
-              name="attendance_check"
-              value="x"
-            />
-          </form>
-        </td>
-        <td>{{ attendance_jp }}</td>
-      </tr>
-    </table>
-  </div>
+  <tr>
+    <td>
+      <b>{{ member_info.name }}</b>
+    </td>
+    <td>
+      <div class="control">
+        <button
+          class="button is-info"
+          v-bind:class="[member_info.attendance === 'o' ? '' : 'is-outlined']"
+          v-on:click="checkAttendance('o')"
+        >
+          出席
+        </button>
+        <button
+          class="button is-success"
+          v-bind:class="[member_info.attendance === 'e' ? '' : 'is-outlined']"
+          v-on:click="checkAttendance('e')"
+        >
+          早退
+        </button>
+        <button
+          class="button is-danger"
+          v-bind:class="[member_info.attendance === 'x' ? '' : 'is-outlined']"
+          v-on:click="checkAttendance('x')"
+        >
+          欠席
+        </button>
+      </div>
+    </td>
+  </tr>
 </template>
 
 <script>
 export default {
   props: {
     member_info: Object
+  },
+  data: function() {
+    return {};
   },
   computed: {
     attendance_jp: function() {
@@ -51,6 +53,11 @@ export default {
         case "-":
           return "無断欠席";
       }
+    }
+  },
+  methods: {
+    checkAttendance: function(attendance) {
+      this.member_info.attendance = attendance;
     }
   }
 };

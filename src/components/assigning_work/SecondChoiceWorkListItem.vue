@@ -1,10 +1,16 @@
 <template lang="html"
-  ><div>
-    {{ work.name }} :
-    <input type="number" min="0" v-model="work.second_require" />
-    <button v-on:click="incrementSecondRequire">+</button>
-    <button v-on:click="decrementSecondRequire">-</button>
-  </div>
+  ><tr>
+    <td>{{ work.name }}</td>
+    <td>{{ work.second_require }}</td>
+    <td>
+      <button class="button is-info" v-on:click="incrementSecondRequire">
+        +
+      </button>
+      <button class="button is-danger" v-on:click="decrementSecondRequire">
+        -
+      </button>
+    </td>
+  </tr>
 </template>
 
 <script>
