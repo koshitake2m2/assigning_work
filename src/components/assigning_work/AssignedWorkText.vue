@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import db from "@/firebaseInit";
 export default {
   props: {
     member_info_list: Array,
@@ -118,9 +117,6 @@ export default {
       // フォーカスを外す
       target.blur();
     }
-    //    writeMeetingInfo: function() {
-    //      this.$emit("update-db");
-    //    }
   }
 };
 </script>

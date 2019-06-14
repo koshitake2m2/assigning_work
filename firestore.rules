@@ -1,0 +1,20 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /members/{member_id} {
+      allow read;
+      allow write: if request.auth.token.admin == true;
+    }
+    match /works/{work_id} {
+      allow read;
+      allow write: if request.auth.token.admin == true;
+    }
+    match /past_meeting/{past_meeting_id} {
+      allow read;
+      allow write: if request.auth.token.admin == true;
+    }
+    match /{document=**} {
+      allow read;
+      allow write: if false;
+    }
+  }
+}

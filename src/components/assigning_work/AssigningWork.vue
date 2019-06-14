@@ -131,20 +131,6 @@
         <hr />
       </div>
     </section>
-
-    <!--
-        フッター
-    -->
-    <footer class="footer">
-      <div class="content has-text-centered">
-        <p>
-          <strong>AssigningWork</strong> by
-          <a href="https://github.com/koshitake2m2">輿水猛</a>. The source code
-          is licensed
-          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
-        </p>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -166,7 +152,8 @@ import {
   compareDeepValues
 } from "@/assets/js/function_of_member_info_list.js";
 
-import db from "@/firebaseInit";
+import firebaseApp from "@/firebaseInit";
+const db = firebaseApp.firestore();
 export default {
   components: {
     MeetingInfo,
