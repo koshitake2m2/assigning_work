@@ -30,12 +30,20 @@
             <template v-if="visiting_user.is_loggedin">
               <div>{{ visiting_user.info.displayName }} さん</div>
 
-              <logout v-bind:loginUser="visiting_user.info"></logout>
+              <logout v-bind:visiting_user="visiting_user"></logout>
             </template>
             <template v-else>
+              <button class="button is-info" v-on:click="my_login">
+                ログイン pop up
+              </button>
+              <button class="button is-info" v-on:click="my_login_redirect">
+                ログイン redirect
+              </button>
+              <!--
               <router-link to="/login">
                 <button class="button is-info">ログイン</button>
               </router-link>
+            -->
             </template>
           </div>
         </div>
@@ -78,6 +86,81 @@ export default {
         info: null
       }
     };
+  },
+  created() {
+    console.log("app created");
+    firebase.auth().onAuthStateChanged(msg => {
+      console.log("onAuthStateChanged by App", msg);
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        console.log("already logged out. hello! guest!");
+        this.visiting_user.is_loggedin = false;
+        this.visiting_user.is_admin = false;
+        this.visiting_user.info = null;
+        return;
+      }
+
+      this.visiting_user.is_loggedin = true;
+      user.getIdTokenResult(true).then(idTokenResult => {
+        if (idTokenResult.claims.admin) {
+          // current user has admin
+          console.log("hello! admin!");
+          this.visiting_user.is_admin = true;
+        } else {
+          console.log("hello! not admin!");
+        }
+      });
+
+      this.visiting_user.info = user;
+    });
+  },
+  methods: {
+    my_login: function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = result.credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // ...
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          const credential = error.credential;
+          // ...
+        });
+    },
+    my_login_redirect: function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithRedirect(provider)
+        .then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = result.credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // ...
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          const credential = error.credential;
+          // ...
+        });
+    }
   }
 };
 </script>

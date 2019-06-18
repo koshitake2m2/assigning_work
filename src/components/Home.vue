@@ -54,7 +54,8 @@ export default {
   },
   data() {
     return {};
-  },
+  }
+  /*
   beforeRouteEnter(route, redirect, next) {
     console.log("Home_beforeRouteEnter");
     firebase.auth().onAuthStateChanged(user => {
@@ -106,5 +107,6 @@ export default {
       next();
     });
   }
+  */
 };
 </script>
