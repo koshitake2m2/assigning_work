@@ -118,6 +118,7 @@ export default {
         ) {
           assignable_members[index]["assigned_work"] = this.work.name;
           assignable_members[index]["assigned_work_id"] = this.work.work_id;
+          assignable_members[index]["is_first_choiced"] = true;
         }
         this.selected_member_id = "";
         this.meeting_info.can_run = true;
@@ -136,6 +137,7 @@ export default {
       for (const index of indexes) {
         this.member_info_list[index]["assigned_work"] = "";
         this.member_info_list[index]["assigned_work_id"] = "";
+        this.member_info_list[index]["is_first_choiced"] = false;
       }
       this.selected_member_id = "";
       this.meeting_info.can_run = true;

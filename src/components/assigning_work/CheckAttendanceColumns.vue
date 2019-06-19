@@ -2,7 +2,7 @@
   <div>
     <div class="columns is-multiline">
       <div
-        class="column is-one-quarter"
+        class="column is-narrow"
         is="column-of-check-attendance-by-grade"
         v-for="member_info_list_by_grade in member_info_list_by_grade_list"
         v-bind:key="member_info_list_by_grade.grade"

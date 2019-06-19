@@ -1,7 +1,22 @@
 <template lang="html">
   <div>
+    <div class="columns is-centered is-multiline">
+      <div
+        class="column is-narrow"
+        is="ColumnOfSecondChoiceWorkList"
+        v-for="part_of_all_works in all_works_parts"
+        v-bind:key="part_of_all_works.work_id"
+        v-bind:part_of_all_works="part_of_all_works"
+      ></div>
+    </div>
+    <div class="is-size-3">
+      <b>{{ second_choice_info }}</b> <br />
+      <br />
+    </div>
     <div class="columns is-mobile">
-      <div class="column is-half is-offset-one-quarter">
+      <div
+        class="column is-half-desktop is-offset-one-quarter-desktop is-full-mobile"
+      >
         <button
           class="button is-primary is-large is-fullwidth"
           v-bind:disabled="cannot_run"
@@ -12,46 +27,15 @@
         <br />
       </div>
     </div>
-    決まった人数 : 残りの人数 = {{ n_selected_members }} :
-    {{ n_not_selected_members }} <br />
-    ランダム決めに必要な人数 : {{ sum_second_require }} <br />
-    {{ second_choice_info }}<br />
-    <br />
-    <div class="card"></div>
-
-    <table class="table is-hoverable">
-      <tbody>
-        <tr>
-          <th>仕事</th>
-          <th>必要人数</th>
-          <th></th>
-        </tr>
-        <tr
-          is="second-choice-work-list-item"
-          v-for="(work, index) in all_works"
-          v-bind:key="work.work_id"
-          v-bind:work="work"
-          v-bind:member_info_list="member_info_list"
-        ></tr>
-      </tbody>
-    </table>
-    <br />
-    {{ second_choice_info }}<br />
     <div class="columns is-mobile">
-      <div class="column is-half is-offset-one-quarter">
-        <button
-          class="button is-primary is-large is-fullwidth"
-          v-bind:disabled="cannot_run"
-          v-on:click="decideSecondChoice"
-        >
-          Run
-        </button>
-        <br />
+      <div
+        class="column is-half-desktop is-offset-one-quarter-desktop is-full-mobile"
+      >
         <button
           class="button is-danger is-large is-fullwidth"
-          v-on:click="clearAssignedWork"
+          v-on:click="clearRandomDecided"
         >
-          Clear Work
+          ランダムで決めた人をリセット
         </button>
         <br />
       </div>
@@ -60,7 +44,7 @@
 </template>
 
 <script>
-import SecondChoiceWorkListItem from "@/components/assigning_work/SecondChoiceWorkListItem";
+import ColumnOfSecondChoiceWorkList from "@/components/assigning_work/ColumnOfSecondChoiceWorkList";
 
 import {
   arrayShuffle,
@@ -70,7 +54,7 @@ import {
 
 export default {
   components: {
-    SecondChoiceWorkListItem
+    ColumnOfSecondChoiceWorkList
   },
   props: {
     all_works: Array,
@@ -134,6 +118,17 @@ export default {
         this.n_not_selected_members < this.sum_second_require ||
         !this.meeting_info.can_run
       );
+    },
+    all_works_parts: function() {
+      let all_works_parts = [];
+      let i = 0;
+      const part_length = 6;
+      while (this.all_works.length > i) {
+        all_works_parts.push(this.all_works.slice(i, i + part_length));
+        i += part_length;
+      }
+      console.log(all_works_parts);
+      return all_works_parts;
     }
   },
   methods: {
@@ -184,6 +179,14 @@ export default {
     },
     clearAssignedWork: function() {
       for (const member_info of this.member_info_list) {
+        member_info.assigned_work = "";
+        member_info.assigned_work_id = "";
+      }
+    },
+    clearRandomDecided: function() {
+      for (const member_info of this.member_info_list.filter(member_info => {
+        return !member_info.is_first_choiced;
+      })) {
         member_info.assigned_work = "";
         member_info.assigned_work_id = "";
       }

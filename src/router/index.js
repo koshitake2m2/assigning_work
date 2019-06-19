@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Login from '@/components/Login'
-import HelloWorld from '@/components/HelloWorld'
 import Home from '@/components/Home'
-import PracticeApp from '@/components/practice/PracticeApp'
 import AssigningWork from '@/components/assigning_work/AssigningWork'
 import AssigningWorkDev from '@/components/assigning_work/AssigningWorkDev'
 import NotFound from '@/components/NotFound'
@@ -38,16 +35,6 @@ let router = new VueRouter({
       component: Home
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/hello',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
       path: '/assigning_work',
       name: 'assigning_work',
       component: AssigningWork,
@@ -59,11 +46,6 @@ let router = new VueRouter({
       path: '/assigning_work_dev',
       name: 'assigning_work_dev',
       component: AssigningWorkDev
-    },
-    {
-      path: '/practice',
-      name: 'practice',
-      component: PracticeApp
     },
     {
       path: '*',

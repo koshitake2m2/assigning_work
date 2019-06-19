@@ -39,11 +39,6 @@
               <button class="button is-info" v-on:click="my_login_redirect">
                 ログイン redirect
               </button>
-              <!--
-              <router-link to="/login">
-                <button class="button is-info">ログイン</button>
-              </router-link>
-            -->
             </template>
           </div>
         </div>
@@ -69,13 +64,11 @@
 
 <script>
 import firebase from "firebase";
-import Login from "@/components/Login.vue";
-import Logout from "@/components/Logout.vue";
+import Logout from "@/components/Logout";
 
 export default {
   name: "App",
   components: {
-    Login,
     Logout
   },
   data: function() {

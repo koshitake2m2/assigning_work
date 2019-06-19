@@ -5,7 +5,7 @@
       手動決めできる仕事を追加
       -->
       <div class="column">
-        <h2 class="subtitle">3.1. 手動決めできる仕事を追加</h2>
+        <h2 class="subtitle"><b>3.1. 指名決めできる仕事を追加</b></h2>
         <form v-on:submit.prevent="addFirstChoiceWork(selected_work_id)">
           <div class="select">
             <select v-model="selected_work_id">
@@ -39,7 +39,7 @@
       手動決め
       -->
       <div class="column">
-        <h2 class="subtitle">3.2. 各仕事ごと当番を決める</h2>
+        <h2 class="subtitle"><b>3.2. 各仕事ごと当番を決める</b></h2>
         決まった人数 : 残りの人数 = {{ n_selected_members }} :
         {{ n_not_selected_members }}
         <p>{{ meeting_info.can_run }}</p>

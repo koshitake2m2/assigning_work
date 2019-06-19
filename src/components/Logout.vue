@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <button class="button is-danger" v-on:click="logout()">ログアウト</button>
-  </div>
+  <div><button class="button" v-on:click="logout()">ログアウト</button></div>
 </template>
 
 <script>
-const firebase = require("firebase");
+import firebase from "firebase";
 
 export default {
   name: "Logout",

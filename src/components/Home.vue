@@ -13,7 +13,9 @@
 
     <section>
       <div class="columns is-mobile">
-        <div class="column is-half is-offset-one-quarter">
+        <div
+          class="column is-half-desktop is-offset-one-quarter-desktop is-full-mobile"
+        >
           <router-link to="/assigning_work">
             <button
               class="button is-info is-large is-fullwidth"
@@ -39,74 +41,10 @@
 </template>
 
 <script>
-const firebase = require("firebase");
-import Login from "@/components/Login.vue";
-import Logout from "@/components/Logout.vue";
-
 export default {
-  name: "Index",
+  name: "Home",
   props: {
     visiting_user: Object
-  },
-  components: {
-    Login,
-    Logout
-  },
-  data() {
-    return {};
   }
-  /*
-  beforeRouteEnter(route, redirect, next) {
-    console.log("Home_beforeRouteEnter");
-    firebase.auth().onAuthStateChanged(user => {
-      console.log("onAuthStateChanged", user);
-      next(vm => {
-        const user = firebase.auth().currentUser;
-        if (!user) {
-          return;
-        }
-
-        vm.visiting_user.is_loggedin = true;
-        user.getIdTokenResult(true).then(idTokenResult => {
-          if (idTokenResult.claims.admin) {
-            // current user has admin
-            console.log("hello!!!admin!");
-            vm.visiting_user.is_admin = true;
-          } else {
-            console.log("hello!!!");
-          }
-        });
-
-        vm.visiting_user.info = user;
-      });
-    });
-  },
-  beforeRouteUpdate(to, from, next) {
-    console.log("Home_beforeRouteUpdate");
-    let vm = this;
-    vm.visiting_user.info = null;
-    vm.visiting_user.is_loggedin = false;
-    vm.visiting_user.is_admin = false;
-    firebase.auth().onAuthStateChanged(user => {
-      console.log("onAuthStateChanged", user);
-      if (!user) {
-        next();
-        return;
-      }
-      vm.visiting_user.is_loggedin = true;
-      user.getIdTokenResult(true).then(idTokenResult => {
-        if (idTokenResult.claims.admin) {
-          // current user has admin
-          console.log("hello!!!admin!");
-          vm.visiting_user.is_admin = true;
-        } else {
-          console.log("hello!!!");
-        }
-      });
-      vm.visiting_user.info = user;
-      next();
-    });
-  }
-  */
 };
 </script>

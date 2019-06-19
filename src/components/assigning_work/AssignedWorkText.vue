@@ -23,13 +23,15 @@
 出席者：
 {{ attending_members }}
 
-当番：
+当番
 {{ members_by_assigned_work }}</textarea
       >
     </form>
     <br />
     <div class="columns is-mobile">
-      <div class="column is-half is-offset-one-quarter">
+      <div
+        class="column is-half-desktop is-offset-one-quarter-desktop is-full-mobile"
+      >
         <button
           class="button is-info is-large is-fullwidth"
           v-on:click="copyAssignedWorkText"
@@ -38,11 +40,6 @@
         </button>
       </div>
     </div>
-    <!--
-    <button class="button is-primary" v-on:click="writeMeetingInfo">
-      Submit
-    </button>
-    -->
   </div>
 </template>
 
