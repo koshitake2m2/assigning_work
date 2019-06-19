@@ -20,10 +20,9 @@ npm run build --report
 
 1. firebaseのwebアプリのプロジェクト、firestoreを用意しておく
 2. $ firebase login
-3. $ firebase init
-4. $ cp src/components/firebaseConfig.js.sample src/components/firebaseConfig.js  
-5. firebaseConfig.js にfirebase admin sdkの情報を記入する。
-6. $ firebase deploy
+3. src/firebaseConfig.js にfirebase admin sdkの情報を記入する。
+4. $ npm run build
+5. $ firebase deploy
 
 ## License
 The source code is licensed [MIT](http://opensource.org/licenses/mit-license.php).

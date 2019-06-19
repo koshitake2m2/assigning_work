@@ -3,12 +3,12 @@
 </template>
 
 <script>
-const firebase = require("firebase");
+import firebase from "firebase";
 
 export default {
   name: "Logout",
   props: {
-    loginUser: Object
+    visiting_user: Object
   },
   methods: {
     // ログアウト
@@ -21,13 +21,17 @@ export default {
       firebase
         .auth()
         .signOut()
-        .then(function(res) {
-          console.log("signOut", res);
+        .then(() => {
+          console.log("logout");
           alert("ログアウトしました。");
-          vm.$router.go();
+          vm.visiting_user.is_loggedin = false;
+          vm.visiting_user.is_admin = false;
+          vm.visiting_user.info = null;
+          //vm.$router.go();
+          // memo: vm.$router.go()を使えばそれが呼ばれた時に、App.vueが再描画されて、visiting_userが初期化されて、ログアウト状態になる。
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(err => {
+          console.log(err);
         });
     },
     accountDelete() {
@@ -40,13 +44,13 @@ export default {
       firebase
         .auth()
         .currentUser.delete()
-        .then(function(res) {
+        .then(res => {
           console.log("currentUser.delete", res);
           alert("アカウントを削除しました。");
           vm.$router.go();
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(err => {
+          console.log(err);
         });
     }
   }

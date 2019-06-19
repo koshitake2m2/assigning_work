@@ -17,12 +17,12 @@
         <h1 class="title">0. 目次</h1>
         <div class="content">
           <div class="columns is-mobile is-centered">
-            <div class="column is-3">
+            <div class="column is-narrow">
               <ol type="1" start="0" align="left">
                 <li>目次</li>
                 <li>会議の情報</li>
                 <li>出席確認</li>
-                <li>手動決め</li>
+                <li>指名決め</li>
                 <li>ランダム決め</li>
                 <li>出席と当番の確認</li>
                 <li>今日の会議情報の保存</li>
@@ -62,7 +62,7 @@
     -->
     <section class="section">
       <div class="container" align="center">
-        <h1 class="title">3. 手動決め</h1>
+        <h1 class="title">3. 指名決め</h1>
         <first-choice-work-list
           v-bind:all_works="all_works"
           v-bind:member_info_list="member_info_list"
@@ -262,6 +262,7 @@ export default {
         attendance: "x",
         work: "",
         work_id: "",
+        is_first_choiced: false,
         work_count: 0,
         attendance_by_category: {
           o: 0,

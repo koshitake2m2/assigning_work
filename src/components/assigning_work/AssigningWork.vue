@@ -17,12 +17,12 @@
         <h1 class="title">0. 目次</h1>
         <div class="content">
           <div class="columns is-mobile is-centered">
-            <div class="column is-2">
+            <div class="column is-narrow">
               <ol type="1" start="0" align="left">
                 <li>目次</li>
                 <li>会議の情報</li>
                 <li>出席確認</li>
-                <li>手動決め</li>
+                <li>指名決め</li>
                 <li>ランダム決め</li>
                 <li>出席と当番の確認</li>
                 <li>今日の会議情報の保存</li>
@@ -62,7 +62,7 @@
     -->
     <section class="section">
       <div class="container" align="center">
-        <h1 class="title">3. 手動決め</h1>
+        <h1 class="title">3. 指名決め</h1>
         <first-choice-work-list
           v-bind:all_works="all_works"
           v-bind:member_info_list="member_info_list"
@@ -116,7 +116,9 @@
         <h2 class="subtitle">今日の会議の情報をfirestoreに保存します</h2>
         <br />
         <div class="columns is-mobile">
-          <div class="column is-half is-offset-one-quarter">
+          <div
+            class="column is-half-desktop is-offset-one-quarter-desktop is-full-mobile"
+          >
             <button
               class="button is-primary is-large is-fullwidth"
               v-bind:disabled="meeting_info.is_submited"
